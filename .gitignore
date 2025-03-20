@@ -11,3 +11,6 @@ wheels/
 
 # Node modules
 *node_modules/
+
+# Testing pages
+*test*.html
