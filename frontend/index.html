@@ -29,16 +29,16 @@
                     <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 text-2xl">Column name</div>
                 </header>
 
-                <section class="h-11/12 flex justify-start text-text box-border">
-                    <div class="h-max text-nowrap flex-none w-72 box-border p-2 flex flex-col justify-start">
+                <section class="grow flex justify-start text-text box-border">
+                    <div class="h-full text-nowrap flex-none w-72 box-border p-2 flex flex-col justify-start">
                         <div id="card1" class="w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border rounded-lg flex flex-col justify-around">
                             <header class="flex justify-between"> <h2>T540p</h2> <p>15 pcs.</p> </header>
                             <section>
                                 <div class="flex justify-between"> <span>From:</span> <span>Far chinese</span> </div>
                                 <div class="flex justify-between"> <span>Responsible:</span> <span>Usama</span> </div>
                             </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon text-base">Split</button>
-                            <div class="bg-[url(/assets/drag.png)] bg-contain w-5 h-5 mx-auto cursor-pointer"></div>
+                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-base">Split</button>
+                            <div class="bg-[url(/img/drag.png)] bg-contain w-5 h-5 mx-auto cursor-pointer" draggable="true"></div>
                         </div>
 
                         <div class="w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border rounded-lg flex flex-col justify-around">
@@ -47,7 +47,7 @@
                                 <div class="flex justify-between"> <span>From:</span> <span>Close chinese</span> </div>
                                 <div class="flex justify-between"> <span>Responsible:</span> <span>Kostya</span> </div>
                             </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon text-base">Split</button>
+                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-base">Split</button>
                         </div>
 
                         <div class="w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border rounded-lg flex flex-col justify-around">
@@ -56,7 +56,7 @@
                                 <div class="flex justify-between"> <span>From:</span> <span>Close chinese</span> </div>
                                 <div class="flex justify-between"> <span>Responsible:</span> <span>Kostya</span> </div>
                             </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon text-base">Split</button>
+                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-base">Split</button>
                         </div>
 
                         <div class="w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border rounded-lg flex flex-col justify-around">
@@ -65,26 +65,57 @@
                                 <div class="flex justify-between"> <span>From:</span> <span>Close chinese</span> </div>
                                 <div class="flex justify-between"> <span>Responsible:</span> <span>Kostya</span> </div>
                             </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon text-base">Split</button>
+                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-base">Split</button>
                         </div>
                     </div>
 
-                    <div class="h-max text-nowrap flex-none w-72 box-border p-2">
+                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
+                        <div id="text-result" class="text-wrap w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border rounded-lg flex flex-col justify-around">
+
+                            <script>
+                                const draggable = document.querySelector('div[draggable=true]');
+                                const card = draggable.parentNode;
+                                const main = document.querySelector('main');
+                                const textResult = document.querySelector('#text-result');
+                                main.addEventListener("dragover", (e) => {
+                                    const offsetX = e.clientX - draggable.offsetWidth/2 - main.offsetLeft - draggable.offsetLeft + main.scrollLeft - card.offsetLeft;
+                                    const offsetY = e.clientY + draggable.offsetHeight/2 - main.offsetTop - draggable.offsetTop + main.scrollTop - card.offsetHeight/2;
+                                    textResult.innerHTML = (`Draggable moved from start position by: <br>
+                                        X: ${offsetX}px <br>
+                                        Y: ${offsetY}px`);
+                                    draggable.parentNode.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+                                });
+
+                                draggable.addEventListener("dragstart", (e) => {
+                                    // Create a transparent image
+                                    const transparentImage = new Image();
+
+                                    // Set the drag image to the transparent image
+                                    event.dataTransfer.setDragImage(transparentImage, 0, 0);
+                                });
+
+                                draggable.addEventListener("dragend", () => {
+                                    draggable.parentNode.style.transitionDuration = '150ms';
+                                    draggable.parentNode.style.transform = `translate(0px, 0px)`;
+                                    setTimeout(() => draggable.parentNode.style.transitionDuration = '0ms', 150);
+                                });
+                            </script>
+                        </div>
                     </div>
 
-                    <div class="h-max text-nowrap flex-none w-72 box-border p-2">
+                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
                     </div>
 
-                    <div class="h-max text-nowrap flex-none w-72 box-border p-2">
+                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
                     </div>
 
-                    <div class="h-max text-nowrap flex-none w-72 box-border p-2">
+                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
                     </div>
 
-                    <div class="h-max text-nowrap flex-none w-72 box-border p-2">
+                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
                     </div>
 
-                    <div class="h-max text-nowrap flex-none w-72 box-border p-2">
+                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
                     </div>
 
                 </section>
