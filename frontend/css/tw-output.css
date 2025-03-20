@@ -253,6 +253,9 @@
   .h-20 {
     height: calc(var(--spacing) * 20);
   }
+  .h-28 {
+    height: calc(var(--spacing) * 28);
+  }
   .h-42 {
     height: calc(var(--spacing) * 42);
   }
@@ -297,6 +300,9 @@
   }
   .grow {
     flex-grow: 1;
+  }
+  .transform {
+    transform: var(--tw-rotate-x) var(--tw-rotate-y) var(--tw-rotate-z) var(--tw-skew-x) var(--tw-skew-y);
   }
   .cursor-pointer {
     cursor: pointer;
@@ -380,6 +386,12 @@
   }
   .bg-\[url\(\/assets\/drag\.png\)\] {
     background-image: url(/assets/drag.png);
+  }
+  .bg-\[url\(\/img\/drag\.png\)\] {
+    background-image: url(/img/drag.png);
+  }
+  .bg-\[url\(img\/drag\.png\)\] {
+    background-image: url(img/drag.png);
   }
   .from-maroon {
     --tw-gradient-from: var(--color-maroon);
@@ -467,6 +479,9 @@
   .text-nowrap {
     text-wrap: nowrap;
   }
+  .text-wrap {
+    text-wrap: wrap;
+  }
   .text-base {
     color: var(--color-base);
   }
@@ -485,6 +500,30 @@
   .text-transparent {
     color: transparent;
   }
+  .duration-0 {
+    --tw-duration: 0ms;
+    transition-duration: 0ms;
+  }
+  .duration-50 {
+    --tw-duration: 50ms;
+    transition-duration: 50ms;
+  }
+  .duration-150 {
+    --tw-duration: 150ms;
+    transition-duration: 150ms;
+  }
+  .duration-200 {
+    --tw-duration: 200ms;
+    transition-duration: 200ms;
+  }
+  .duration-300 {
+    --tw-duration: 300ms;
+    transition-duration: 300ms;
+  }
+  .duration-500 {
+    --tw-duration: 500ms;
+    transition-duration: 500ms;
+  }
   .hover\:bg-peach\/75 {
     &:hover {
       @media (hover: hover) {
@@ -497,6 +536,31 @@
       background-color: var(--color-maroon);
     }
   }
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: rotateX(0);
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: rotateY(0);
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: rotateZ(0);
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: skewX(0);
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: skewY(0);
 }
 @property --tw-border-style {
   syntax: "*";
@@ -544,4 +608,8 @@
   syntax: "<length-percentage>";
   inherits: false;
   initial-value: 100%;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
 }
