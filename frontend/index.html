@@ -7,6 +7,8 @@
 
         <link rel="stylesheet" href="css/tw-output.css" />
 
+        <script src="drag-n-drop.js" defer></script>
+
         <title>Accounting System</title>
     </head>
     <body class="m-0 p-0">
@@ -70,36 +72,8 @@
                     </div>
 
                     <div class="h-full text-nowrap flex-none w-72 box-border p-2">
-                        <div id="text-result" class="text-wrap w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border rounded-lg flex flex-col justify-around">
+                        <div id="text-result" class="text-wrap w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border rounded-lg flex flex-col justify-around bg-surface0 hover:bg-surface2">
 
-                            <script>
-                                const draggable = document.querySelector('div[draggable=true]');
-                                const card = draggable.parentNode;
-                                const main = document.querySelector('main');
-                                const textResult = document.querySelector('#text-result');
-                                main.addEventListener("dragover", (e) => {
-                                    const offsetX = e.clientX - draggable.offsetWidth/2 - main.offsetLeft - draggable.offsetLeft + main.scrollLeft - card.offsetLeft;
-                                    const offsetY = e.clientY + draggable.offsetHeight/2 - main.offsetTop - draggable.offsetTop + main.scrollTop - card.offsetHeight/2;
-                                    textResult.innerHTML = (`Draggable moved from start position by: <br>
-                                        X: ${offsetX}px <br>
-                                        Y: ${offsetY}px`);
-                                    draggable.parentNode.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-                                });
-
-                                draggable.addEventListener("dragstart", (e) => {
-                                    // Create a transparent image
-                                    const transparentImage = new Image();
-
-                                    // Set the drag image to the transparent image
-                                    event.dataTransfer.setDragImage(transparentImage, 0, 0);
-                                });
-
-                                draggable.addEventListener("dragend", () => {
-                                    draggable.parentNode.style.transitionDuration = '150ms';
-                                    draggable.parentNode.style.transform = `translate(0px, 0px)`;
-                                    setTimeout(() => draggable.parentNode.style.transitionDuration = '0ms', 150);
-                                });
-                            </script>
                         </div>
                     </div>
 
