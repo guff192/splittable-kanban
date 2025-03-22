@@ -8,20 +8,25 @@
         <link rel="stylesheet" href="css/tw-output.css" />
 
         <script src="drag-n-drop.js" defer></script>
+        <script src="theme.js" defer></script>
 
         <title>Accounting System</title>
     </head>
-    <body class="m-0 p-0">
-        <div id="root" class="h-screen w-screen flex flex-col justify-start bg-gradient-to-b from-surface0 to-crust m-0 pt-5 pb-5 px-5">
-            <nav class="w-2/3 h-12 flex-none mx-auto flex justify-center items-center text-center text-crust bg-overlay2 rounded-lg">
-                This is nav bar
+    <body class="m-0 p-0 bg-gradient-to-b from-gray to-crust">
+        <div id="root" class="h-screen w-screen flex flex-col justify-start bg-gradient-to-b from-base via-lavender/70 to-crust m-0 pt-5 pb-5 px-5">
+            <nav class="w-2/3 h-12 flex-none mx-auto flex justify-center items-center text-center text-crust bg-surface2 rounded-lg">
+                <div id="theme-toggle" class="w-max h-[calc(100%-5px)] px-2 flex justify-around items-center bg-overlay2 rounded-lg text-xl">
+                    <button data-theme="catppuccin-latte" class="px-2 py-1 rounded-lg duration-1500 cursor-pointer">🌞</button>
+                    <button data-theme="catppuccin-frappe" class="px-2 py-1 rounded-lg duration-1500 cursor-pointer">🌗</button>
+                    <button data-theme="catppuccin-mocha" class="px-2 py-1 rounded-lg duration-1500 cursor-pointer">🌑</button>
+                </div>
             </nav>
 
-            <h1 class="mt-10 h-14 flex-none text-5xl text-center bg-gradient-to-br from-red to-blue-400 bg-clip-text text-transparent">Accounting system</h1>
-            <a href="components-test.html" class="text-subtext0 text-center">Test component</a>
+            <h1 class="mt-10 h-14 flex-none text-5xl text-center bg-gradient-to-br from-red via-mauve to-blue bg-clip-text text-transparent">Accounting system</h1>
+            <a href="components-test.html" class="text-subtext1 text-center">Test component</a>
 
             <main class="mt-10 h-full w-full mx-auto flex flex-col grow border-pink border-4 rounded-lg overflow-auto relative">
-                <header class="h-12 flex-none w-max flex justify-start bg-blue/75 text-crust box-border sticky top-0 z-10">
+                <header class="h-12 flex-none w-max flex justify-start bg-blue/75 text-text box-border sticky top-0 z-10">
                     <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
                     <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
                     <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
