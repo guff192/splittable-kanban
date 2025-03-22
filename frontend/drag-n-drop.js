@@ -9,11 +9,14 @@ function handleColumnDragOver(event) {
     const movingCard = document.querySelector("div[is-dragging=true]");
     console.log(movingCard);
     console.log(this);
+    console.log(`clientY: ${event.clientY}`);
+    console.log(event.target.offsetParent);
 
     const cardBelow = getCardBelow(event.target, event.clientY);
     if (!cardBelow) {
-        // this.appendChild(movingCard);
+        this.appendChild(movingCard);
     } else {
+        this.insertBefore(movingCard, cardBelow);
     }
 }
 
@@ -24,6 +27,22 @@ function handleColumnDragOver(event) {
     * @returns {HTMLElement|null} - The card element or null if not found.
 */
 function getCardBelow(column, yPos) {
+    const cardsInCol = column.querySelectorAll("div.card");
+
+    let closestCard = null;
+    let minOffset = Number.NEGATIVE_INFINITY;
+
+    cardsInCol.forEach((card) => {
+        const { top } = card.getBoundingClientRect();
+        const cardOffset = yPos - top;
+
+        if (cardOffset < 0 && cardOffset > minOffset) {
+            closestCard = card;
+            minOffset = cardOffset;
+        }
+    });
+
+    return closestCard;
 }
 
 
