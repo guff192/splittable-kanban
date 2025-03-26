@@ -1,22 +1,45 @@
-/**
-    *
-    * Handles dragover event on a column when a card is being dragged over it
-    * @param {DragEvent} event - The dragover DragEvent object.
+// const DROP_BOUNDS = 15; // px amount to start dropping
+
+let isMoving = false;
+
+// Cleanup after dragging
+window.addEventListener('dragend', (event) => {
+    event.target.classList.remove('opacity-50');
+    isMoving = false;
+});
+
+/** 
+    * Returns the index of the given column in the columns array.
+    * @param {HTMLElement} column - The column to get the index of.
+    * @returns {number} - The index of the column.
 */
-function handleColumnDragOver(event) {
-    event.preventDefault();
+function getColumnIndex(column) {
+    return Array.from(dropColumns).indexOf(column);
+}
 
-    const movingCard = document.querySelector("div[is-dragging=true]");
-    console.log(movingCard);
-    console.log(this);
-    console.log(`clientY: ${event.clientY}`);
-    console.log(event.target.offsetParent);
+/**
+    * Removes card with fade-out animation.
+    * @param {HTMLElement} card - The card that should be removed.
+*/
+function removeWithAnimation(card) {
+    card.classList.add('opacity-0');
+    setTimeout(() => {
+        card.remove();
+    }, 500);
+}
 
-    const cardBelow = getCardBelow(event.target, event.clientY);
-    if (!cardBelow) {
-        this.appendChild(movingCard);
+/**
+    * Moves card above another card in given column, or just adds to the bottom of this column.
+    * @param {HTMLElement} movingCard - The card that is moving.
+    * @param {HTMLElement} column - The column where the moving card is placed
+    * @param {HTMLElement|null} [belowCard=null] - The card which should be below the one that is moving.
+*/
+function moveCardAbove(movingCard, column, belowCard=null) {
+    isMoving = true;
+    if (!belowCard) {
+        column.appendChild(movingCard);
     } else {
-        this.insertBefore(movingCard, cardBelow);
+        column.insertBefore(movingCard, belowCard);
     }
 }
 
@@ -27,16 +50,16 @@ function handleColumnDragOver(event) {
     * @returns {HTMLElement|null} - The card element or null if not found.
 */
 function getCardBelow(column, yPos) {
-    const cardsInCol = column.querySelectorAll("div.card");
+    const cardsInCol = column.querySelectorAll('task-card');
 
     let closestCard = null;
-    let minOffset = Number.NEGATIVE_INFINITY;
+    let minOffset = Number.POSITIVE_INFINITY;
 
     cardsInCol.forEach((card) => {
-        const { top } = card.getBoundingClientRect();
-        const cardOffset = yPos - top;
+        const { top, height } = card.getBoundingClientRect();
+        const cardOffset = top - yPos + height / 2;
 
-        if (cardOffset < 0 && cardOffset > minOffset) {
+        if (cardOffset > 0 && cardOffset < minOffset) {
             closestCard = card;
             minOffset = cardOffset;
         }
@@ -45,45 +68,41 @@ function getCardBelow(column, yPos) {
     return closestCard;
 }
 
-
-const dropColumns = document.querySelector("main").querySelector("section").querySelectorAll("div.h-full");
-const main = document.querySelector('main');
-const draggable = document.querySelector('div[draggable=true]');
-const card = draggable.parentNode;
-const textResult = document.querySelector('#text-result');
-
-dropColumns.forEach((column) => column.addEventListener("dragover", handleColumnDragOver));
-
-/*
-main.addEventListener("dragover", (e) => {
-    const offsetX = e.clientX - draggable.offsetWidth/2 - main.offsetLeft - draggable.offsetLeft + main.scrollLeft - card.offsetLeft;
-    const offsetY = e.clientY + draggable.offsetHeight/2 - main.offsetTop - draggable.offsetTop + main.scrollTop - card.offsetHeight/2;
-    textResult.innerHTML = (`Draggable moved from start position by: <br>
-        X: ${offsetX}px <br>
-        Y: ${offsetY}px`);
-    draggable.parentNode.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
-});
+/**
+    *
+    * Handles dragover event on a column when a card is being dragged over it.
+    * @param {DragEvent} event - The dragover DragEvent object.
 */
+export default function handleColumnDragOver(event) {
+    event.preventDefault();
 
-draggable.addEventListener("dragstart", (e) => {
-    // Set the drag image to the transparent image (this should be Card Component logic)
-    const transparentImage = new Image();
-    e.dataTransfer.setDragImage(transparentImage, 0, 0);
+    const movingCard = document.querySelector('task-card[is-dragging=true]');
+    const cardBelow = getCardBelow(this, event.clientY);
+    moveCardAbove(movingCard, this, cardBelow);
+}
 
-    // Change border color of draggable card (this should be Card Component logic)
-    e.target.parentNode.classList.remove("border-teal"); 
-    e.target.parentNode.classList.add("border-yellow"); 
+/**
+    *
+    * Handles dragover event on a card in column when a card is being dragged over it.
+    * @param {DragEvent} event - The dragover DragEvent object.
+*/
+function handleCardDragOver(event) {
+    event.preventDefault();
 
-    // Mark the dragging card with attribute (this should be View logic)
-    e.target.parentNode.setAttribute("is-dragging", "true");
-});
+    const movingCard = document.querySelector('div[is-dragging=true]');
+    const column = this.parentNode;
+    const cardBelow = getCardBelow(column, event.clientY);
+    moveCardAbove(movingCard, column, cardBelow);
+}
 
-draggable.addEventListener("dragend", (e) => {
-    // Return initial border color of draggable card (this should be Card Component logic)
-    e.target.parentNode.classList.remove("border-yellow"); 
-    e.target.parentNode.classList.add("border-teal"); 
 
-    // Unmark the dragging card with attribute (this should be View logic)
-    e.target.parentNode.removeAttribute("is-dragging");
-});
+const main = document.querySelector('main');
+const dropColumns = main.querySelector('section').querySelectorAll('div.h-full');
+
+/** @type {Array.<HTMLElement>} */
+if (typeof(draggables) === 'undefined') {
+    var draggables = new Array();
+}
+
+dropColumns.forEach((column) => column.addEventListener('dragover', handleColumnDragOver));
 

@@ -2,7 +2,6 @@ const themeToggle = document.querySelector("#theme-toggle");
 const themeBtns = document.querySelectorAll("#theme-toggle button[data-theme]");
 
 
-
 themeBtns.forEach((btn) => {
     btn.addEventListener("click", (e) => {
         const theme = e.target.getAttribute("data-theme");
@@ -13,16 +12,12 @@ themeBtns.forEach((btn) => {
 
 function turnDocumentSmoothnessOn() {
     const elements = document.querySelector("#root").querySelectorAll("*");
-    elements.forEach((element) => {
-        element.classList.add("duration-1000");
-    });
+    elements.forEach((element) => element.classList.add("duration-1000"));
 }
 
 function turnDocumentSmoothnessOff() {
     const elements = document.querySelector("#root").querySelectorAll("*");
-    elements.forEach((element) => {
-        element.classList.remove("duration-1000");
-    });
+    elements.forEach((element) => element.classList.remove("duration-1000"));
 }
 
 
@@ -30,8 +25,11 @@ function setTheme(theme) {
     const activeThemeBtn = themeToggle.querySelector(`[data-theme=${theme}]`);
 
     turnDocumentSmoothnessOn();
-    setTimeout(() => document.documentElement.setAttribute("theme", theme), 100);
-        setTimeout(() => turnDocumentSmoothnessOff(), 170);
+    const elements = document.querySelectorAll("*");
+    elements.forEach((element) => {
+        setTimeout(() => element.setAttribute("theme", theme), 100);
+    });
+    setTimeout(() => turnDocumentSmoothnessOff(), 170);
 
     themeBtns.forEach((btn) => {
         btn.removeAttribute("active");
@@ -49,10 +47,16 @@ function setTheme(theme) {
 }
 
 
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme) {
-    setTheme(savedTheme);
-} else {
-    setTheme("catppuccin-latte");
+function resetTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+        setTheme(savedTheme);
+    } else {
+        setTheme("catppuccin-latte");
+    }
 }
+
+resetTheme();
+
+document.addEventListener('reset-theme', resetTheme);
 

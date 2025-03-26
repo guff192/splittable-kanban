@@ -7,13 +7,18 @@
 
         <link rel="stylesheet" href="css/tw-output.css" />
 
-        <script src="drag-n-drop.js" defer></script>
-        <script src="theme.js" defer></script>
+        <script type="module" src="components/TaskCard.js" defer></script>
+        <script type="module" src="components/AddButton.js" defer></script>
+        <script type="module" src="components/loaders.js"></script>
+
+        <script type="module" src="tasks.js" defer></script>
+        <script type="module" src="drag-n-drop.js" defer></script>
+        <script type="module" src="theme.js" defer></script>
 
         <title>Accounting System</title>
     </head>
-    <body class="m-0 p-0 bg-gradient-to-b from-gray to-crust">
-        <div id="root" class="h-screen w-screen flex flex-col justify-start bg-gradient-to-b from-base via-lavender/70 to-crust m-0 pt-5 pb-5 px-5">
+    <body class="m-0 p-0 bg-radial from-accent to-black">
+        <div id="root" class="h-screen w-screen flex flex-col justify-start bg-gradient-to-br from-yellow/70 via-sapphire/50 to-flamingo/70 m-0 pt-5 pb-5 px-5">
             <nav class="w-2/3 h-12 flex-none mx-auto flex justify-center items-center text-center text-crust bg-surface2 rounded-lg">
                 <div id="theme-toggle" class="w-max h-[calc(100%-5px)] px-2 flex justify-around items-center bg-overlay2 rounded-lg text-xl">
                     <button data-theme="catppuccin-latte" class="px-2 py-1 rounded-lg duration-1500 cursor-pointer">🌞</button>
@@ -22,86 +27,25 @@
                 </div>
             </nav>
 
-            <h1 class="mt-10 h-14 flex-none text-5xl text-center bg-gradient-to-br from-red via-mauve to-blue bg-clip-text text-transparent">Accounting system</h1>
-            <a href="components-test.html" class="text-subtext1 text-center">Test component</a>
+            <header class="flex flex-col items-center">
+                <h1 class="mt-10 h-14 flex-none text-5xl text-center bg-gradient-to-br from-red via-mauve to-blue bg-clip-text text-transparent">Accounting system</h1>
+                <div class="flex flex-col justify-start items-center h-32">
+                    <button id="save" class="w-24 h-10 p-2 rounded-lg cursor-pointer bg-mauve hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Save</button>
+                    <div class="flex flex-col items-center">
+                        <button id="load" class="w-24 h-10 p-2 rounded-lg cursor-pointer bg-green hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Load</button>
+                    </div>
+                </div>
+            </header>
 
             <main class="mt-10 h-full w-full mx-auto flex flex-col grow border-pink border-4 rounded-lg overflow-auto relative">
-                <header class="h-12 flex-none w-max flex justify-start bg-blue/75 text-text box-border sticky top-0 z-10">
-                    <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
-                    <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
-                    <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
-                    <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
-                    <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
-                    <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 border-r border-r-overlay0 text-2xl">Column name</div>
-                    <div class="h-full w-72 text-nowrap text-center flex-none box-border p-2 text-2xl">Column name</div>
+                <header class="h-28 flex-none w-max flex justify-start bg-blue/75 text-text box-border sticky top-0 z-10">
+                    <add-button class="absolute top-1/2 right-0 translate-x-full -translate-y-1/2"><span slot="name">Column</span></add-button>
+                    <!-- Column headers -->
+
                 </header>
 
                 <section class="grow flex justify-start text-subtext0 box-border">
-                    <div class="h-full text-nowrap flex-none w-72 box-border p-2 flex flex-col justify-start">
-                        <!-- This card class is temporarily here. Later it would be custom element -->
-                        <div class="card w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 group hover:bg-sapphire/50">
-                            <header class="flex justify-between text-text group-hover:text-black"> <h2>T540p</h2> <p>15 pcs.</p> </header>
-                            <section class="group-hover:text-black">
-                                <div class="flex justify-between"> <span>From:</span> <span>Far chinese</span> </div>
-                                <div class="flex justify-between"> <span>Responsible:</span> <span>Usama</span> </div>
-                            </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
-                            <div class="bg-[url(/img/drag.png)] bg-contain w-5 h-5 mx-auto cursor-move invert" draggable="true"></div>
-                        </div>
-
-                        <div class="card w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 hover:bg-sapphire/50">
-                            <header class="flex justify-between text-text"> <h2>T14s</h2> <p>35 pcs.</p> </header>
-                            <section>
-                                <div class="flex justify-between"> <span>From:</span> <span>Close chinese</span> </div>
-                                <div class="flex justify-between"> <span>Responsible:</span> <span>Kostya</span> </div>
-                            </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
-                        </div>
-
-                        <div class="card w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 hover:bg-sapphire/50">
-                            <header class="flex justify-between text-text"> <h2>T14s</h2> <p>35 pcs.</p> </header>
-                            <section>
-                                <div class="flex justify-between"> <span>From:</span> <span>Close chinese</span> </div>
-                                <div class="flex justify-between"> <span>Responsible:</span> <span>Kostya</span> </div>
-                            </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
-                        </div>
-
-                        <div class="card w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 hover:bg-sapphire/50">
-                            <header class="flex justify-between text-text"> <h2>T14s</h2> <p>35 pcs.</p> </header>
-                            <section>
-                                <div class="flex justify-between"> <span>From:</span> <span>Close chinese</span> </div>
-                                <div class="flex justify-between"> <span>Responsible:</span> <span>Kostya</span> </div>
-                            </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
-                        </div>
-                    </div>
-
-                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
-                        <div class="card w-11/12 h-42 flex-none mx-auto mb-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 hover:bg-sapphire/50">
-                            <header class="flex justify-between text-text"> <h2>T14s</h2> <p>35 pcs.</p> </header>
-                            <section>
-                                <div class="flex justify-between"> <span>From:</span> <span>Close chinese</span> </div>
-                                <div class="flex justify-between"> <span>Responsible:</span> <span>Kostya</span> </div>
-                            </section>
-                            <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
-                        </div>
-                    </div>
-
-                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
-                    </div>
-
-                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
-                    </div>
-
-                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
-                    </div>
-
-                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
-                    </div>
-
-                    <div class="h-full text-nowrap flex-none w-72 box-border p-2">
-                    </div>
+                    <!-- Columns with tasks -->
 
                 </section>
             </main>

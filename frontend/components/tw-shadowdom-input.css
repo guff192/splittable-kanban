@@ -28,9 +28,6 @@
     --color-base: #efeff1;
     --color-mantle: #d4d4d8;
     --color-crust: #adadba;
-
-    /* Custom accent color */
-    --color-accent: #ece939;
 }
 
 @theme catppuccin-frappe {
@@ -62,8 +59,8 @@
     --color-mantle: #292c3c;
     --color-crust: #232634;
 
-    /* Custom accent color */
-    --color-accent: #bdbc6f;
+    /* Custom gray color */
+    --color-gray: #c3c3e1;
 }
 
 @theme catppuccin-mocha {
@@ -94,9 +91,6 @@
     --color-base: #1e1e2e;
     --color-mantle: #181825;
     --color-crust: #11111b;
-
-    /* Custom accent color */
-    --color-accent: #150b38;
 }
 
 [theme="catppuccin-latte"] {
@@ -127,9 +121,6 @@
     --color-base: #f2f2f7;
     --color-mantle: #e6e6f2;
     --color-crust: #d9d9e6;
-
-    /* Custom accent color */
-    --color-accent: #ece939;
 }
 
 [theme="catppuccin-frappe"] {
@@ -160,9 +151,6 @@
     --color-base: #303446;
     --color-mantle: #292c3c;
     --color-crust: #232634;
-
-    /* Custom accent color */
-    --color-accent: #bdbc6f;
 }
 
 [theme="catppuccin-mocha"] {
@@ -193,8 +181,5 @@
     --color-base: #1e1e2e;
     --color-mantle: #181825;
     --color-crust: #11111b;
-
-    /* Custom accent color */
-    --color-accent: #150b38;
 }
 
