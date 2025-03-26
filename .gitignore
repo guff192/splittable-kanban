@@ -14,3 +14,6 @@ wheels/
 
 # Testing pages
 *test*.html
+
+# Ignore macOS files
+*.DS_Store
