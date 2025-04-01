@@ -1,24 +1,36 @@
 <html>
-    <head>
-    </head>
-    <body>
-        <template id="task-card-template">
-            <div class="w-11/12 h-50 flex-none mx-auto my-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 group hover:bg-sapphire/50 duration-200">
-                <div class="flex justify-end h-min">
-                    <remove-button></remove-button>
-                </div>
-                <header class="flex justify-between text-text group-hover:text-black">
-                    <h3 class="text-2xl text-red"><slot name="name">Name</slot></h3>
-                    <p><slot name="count">Count</slot> pcs.</p>
-                </header>
-                <section class="group-hover:text-black">
-                    <div class="flex justify-between"> <span>From:</span> <span><slot name="from">From</slot></span> </div>
-                    <div class="flex justify-between"> <span>Responsible:</span> <span><slot name="responsible">Responsible</slot></span> </div>
-                </section>
-                <button class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
-                <div class="bg-[url(/img/drag.png)] bg-contain w-5 h-5 mx-auto cursor-move invert" draggable="true"></div>
-            </div>
-        </template>
-    </body>
-</html>
 
+<head>
+</head>
+
+<body>
+    <template id="task-card-template">
+        <div
+            class="w-11/12 h-50 flex-none mx-auto my-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 group hover:bg-sapphire/50 duration-200">
+            <div class="flex justify-end h-min">
+                <remove-button></remove-button>
+            </div>
+            <header class="flex justify-between text-text group-hover:text-black">
+                <h3 class="text-2xl text-red">
+                    <slot name="name">Name</slot>
+                </h3>
+                <p>
+                    <slot name="count">Count</slot> pcs.
+                </p>
+            </header>
+            <section class="group-hover:text-black">
+                <div class="flex justify-between"> <span>From:</span> <span>
+                        <slot name="from">From</slot>
+                    </span> </div>
+                <div class="flex justify-between"> <span>Responsible:</span> <span>
+                        <slot name="responsible">Responsible</slot>
+                    </span> </div>
+            </section>
+            <button
+                class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
+            <div class="bg-[url(/img/drag.png)] bg-contain w-5 h-5 mx-auto cursor-move invert" draggable="true"></div>
+        </div>
+    </template>
+</body>
+
+</html>
