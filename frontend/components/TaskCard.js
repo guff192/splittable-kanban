@@ -26,7 +26,6 @@ class TaskCard extends HTMLElement {
     }
 
     async loadTemplate() {
-        // First check cache
         const template = loadTemplate('templates/task-card.html', '#task-card-template');
         return template;
     }
