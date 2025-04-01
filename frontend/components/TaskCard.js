@@ -40,6 +40,31 @@ class TaskCard extends HTMLElement {
         this.registerDragEventListeners();
         this.registerSplitEventListeners();
         this.registerClickEventListeners();
+        this.registerCustomEventListeners();
+    }
+
+    registerCustomEventListeners() {
+        const removeEventTarget = this.root.querySelector('remove-button').parentNode;
+        removeEventTarget.addEventListener('remove', () => {
+            const firstConfirm = confirm('Are you sure you want to delete this task?');
+            if (!firstConfirm) {
+                return;
+            } else {
+                if (!confirm('The task will be PERMANENTLY DELETED. Are you sure you want to delete this task?')) { return; }
+            }
+
+            /** @type Array */
+            const savedTasks = JSON.parse(localStorage.getItem('tasks'));
+            if (!savedTasks) return;
+
+            savedTasks.forEach((task, index) => {
+                if (task['id'] === Number(this.getAttribute('task-id'))) {
+                    savedTasks.splice(index, 1);
+                }
+            });
+            localStorage.setItem('tasks', JSON.stringify(savedTasks));
+            this.parentNode.removeChild(this);
+        });
     }
 
     registerClickEventListeners() {
@@ -72,9 +97,9 @@ class TaskCard extends HTMLElement {
 
     registerDragEventListeners() {
         // Add event listeners for draggables
-        if (typeof(draggables) === 'undefined') {
+        if (typeof (draggables) === 'undefined') {
             /** @type {Array.<HTMLElement>} */
-                var draggables = new Array();
+            var draggables = new Array();
         }
         const draggable = this.root.querySelector("div[draggable=true]");
         draggables.push(draggable);
@@ -86,8 +111,8 @@ class TaskCard extends HTMLElement {
             e.dataTransfer.setDragImage(transparentImage, 0, 0);
 
             // Change border and bg colors of draggable card (this should be Card Component logic)
-            card.classList.remove("border-teal"); 
-            card.classList.add("border-yellow"); 
+            card.classList.remove("border-teal");
+            card.classList.add("border-yellow");
             card.classList.remove("bg-surface2");
             card.classList.add("bg-surface0");
             card.classList.add('opacity-50');
@@ -97,8 +122,8 @@ class TaskCard extends HTMLElement {
 
         draggable.addEventListener("dragend", (e) => {
             // Return initial border and bg colors of draggable card (this should be Card Component logic)
-            card.classList.remove("border-yellow"); 
-            card.classList.add("border-teal"); 
+            card.classList.remove("border-yellow");
+            card.classList.add("border-teal");
             card.classList.remove("bg-surface0");
             card.classList.add("bg-surface2");
             card.classList.remove('opacity-50');
@@ -139,7 +164,7 @@ class TaskCard extends HTMLElement {
                 localStorage.setItem('tasks', JSON.stringify(new Array()));
                 savedTasks = [];
             }
-            
+
             // Save new task
             savedTasks.push({
                 'id': newCardId,
