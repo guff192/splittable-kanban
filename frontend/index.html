@@ -26,7 +26,14 @@
     </head>
     <body class="m-0 p-0 bg-radial from-accent to-black">
         <div id="root" class="h-screen w-screen flex flex-col justify-start bg-gradient-to-br from-yellow/70 via-sapphire/50 to-flamingo/70 m-0 pt-5 pb-5 px-5">
-            <nav class="w-2/3 h-12 flex-none mx-auto flex justify-center items-center text-center text-crust bg-surface2 rounded-lg">
+            <nav class="w-2/3 h-12 flex-none mx-auto flex justify-evenly items-center text-center text-crust bg-surface2 rounded-lg">
+                <div class="flex justify-between items-center h-full w-56">
+                    <button id="save" class="w-24 h-10 p-2 rounded-lg cursor-pointer bg-mauve hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Save</button>
+                    <div class="flex items-center">
+                        <button id="load" class="w-24 h-10 p-2 rounded-lg cursor-pointer bg-green hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Load</button>
+                    </div>
+                </div>
+
                 <div id="theme-toggle" class="w-max h-[calc(100%-5px)] px-2 flex justify-around items-center bg-overlay2 rounded-lg text-xl">
                     <button data-theme="catppuccin-latte" class="px-2 py-1 rounded-lg duration-1500 cursor-pointer">🌞</button>
                     <button data-theme="catppuccin-frappe" class="px-2 py-1 rounded-lg duration-1500 cursor-pointer">🌗</button>
@@ -36,22 +43,16 @@
 
             <header class="flex flex-col items-center">
                 <h1 class="mt-10 h-14 flex-none text-5xl text-center bg-gradient-to-br from-red via-mauve to-blue bg-clip-text text-transparent">Accounting system</h1>
-                <div class="flex flex-col justify-start items-center h-32">
-                    <button id="save" class="w-24 h-10 p-2 rounded-lg cursor-pointer bg-mauve hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Save</button>
-                    <div class="flex flex-col items-center">
-                        <button id="load" class="w-24 h-10 p-2 rounded-lg cursor-pointer bg-green hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Load</button>
-                    </div>
-                </div>
             </header>
 
             <main class="mt-10 h-full w-full mx-auto flex flex-col grow border-pink border-4 rounded-lg overflow-auto relative">
-                <header class="h-28 flex-none w-max flex justify-start bg-blue/75 text-text box-border sticky top-0 z-10">
-                    <add-button class="absolute top-1/2 right-0 translate-x-full -translate-y-1/2"><span slot="name">Column</span></add-button>
+                <header class="h-24 flex-none w-max flex justify-start bg-blue/75 text-text box-border sticky top-0 z-10 p-1">
+                    <add-button class="absolute top-1/2 right-0 translate-x-full -translate-y-1/2"><span slot="name"></span></add-button>
                     <!-- Column headers -->
 
                 </header>
 
-                <section class="grow flex justify-start text-subtext0 box-border">
+                <section class="grow flex justify-start text-subtext0 box-border p-1">
                     <!-- Columns with tasks -->
 
                 </section>

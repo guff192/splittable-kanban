@@ -18,7 +18,7 @@ function handleHeaderAdd(event) {
     // Create new header column
     const newHeaderColumn = document.createElement('div');
     const newColumnName = 'Column ' + randomString(3);
-    newHeaderColumn.classList.add('w-72', 'text-nowrap', 'text-center', 'flex-none', 'box-border', 'p-2', 'flex', 'flex-col', 'justify-center', 'border-r', 'border-r-overlay0', 'text-3xl');
+    newHeaderColumn.classList.add('w-72', 'text-nowrap', 'text-center', 'flex-none', 'box-border', 'flex', 'flex-col', 'justify-around', 'border-r', 'border-r-overlay0', 'text-3xl');
     tableHeader.appendChild(newHeaderColumn);
     headerColumns = document.querySelectorAll('main > header > div');
     newHeaderColumn.innerHTML = `
@@ -31,7 +31,7 @@ function handleHeaderAdd(event) {
     newHeaderColumn.addEventListener('click', handleHeaderColumnClick);
 
     const newColumn = document.createElement('div');
-    newColumn.classList.add('h-full', 'text-nowrap', 'flex-none', 'w-72', 'box-border', 'p-2');
+    newColumn.classList.add('h-full', 'text-nowrap', 'flex-none', 'w-72', 'box-border');
     columnsContainer.appendChild(newColumn);
     columns = document.querySelectorAll('main > section > div');
     newColumn.addEventListener('dragover', handleColumnDragOver);
@@ -155,12 +155,12 @@ function restoreSavedColumns() {
     savedColumns.forEach((columnName) => {
         // Create new header column
         const newHeaderColumn = document.createElement('div');
-        newHeaderColumn.classList.add('w-72', 'text-nowrap', 'text-center', 'flex-none', 'box-border', 'p-2', 'flex', 'flex-col', 'justify-center', 'border-r', 'border-r-overlay0', 'text-3xl');
+        newHeaderColumn.classList.add('w-72', 'text-nowrap', 'text-center', 'flex-none', 'box-border', 'flex', 'flex-col', 'justify-center', 'border-r', 'border-r-overlay0', 'text-3xl');
         tableHeader.appendChild(newHeaderColumn);
         headerColumns = document.querySelectorAll('main > header > div');
         newHeaderColumn.innerHTML = `
             <h2 class='h-full grow'>${columnName}</h2>
-            <add-button><span slot='name'>Task</span></add-button>
+            <add-button><span slot='name'></span></add-button>
         `;
 
         // Add event listeners
@@ -169,7 +169,7 @@ function restoreSavedColumns() {
 
         // Create new task column
         const newColumn = document.createElement('div');
-        newColumn.classList.add('h-full', 'text-nowrap', 'flex-none', 'w-72', 'box-border', 'p-2');
+        newColumn.classList.add('h-full', 'text-nowrap', 'flex-none', 'w-72', 'box-border');
         columnsContainer.appendChild(newColumn);
         columns = document.querySelectorAll('main > section > div');
         newColumn.addEventListener('dragover', handleColumnDragOver);
@@ -234,6 +234,7 @@ function saveProgress() {
     * @param {MouseEvent} e 
 */
 function loadProgress (e) {
+    // Get or create file input
     let fileLoader = document.querySelector('#progress-loader');
     if (!fileLoader) {
         fileLoader = document.createElement('input');
