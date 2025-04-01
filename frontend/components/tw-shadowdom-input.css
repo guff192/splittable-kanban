@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+    --font-emoji: "Noto Color Emoji", sans-serif;
+}
+
+
 @theme catppuccin-latte {
     /* Catppuccin Latte Colors */
     --color-rosewater: #dc8a78;
