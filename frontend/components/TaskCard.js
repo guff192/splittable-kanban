@@ -23,7 +23,6 @@ export class TaskCard extends HTMLElement {
 
         this.drawCard();
         this.registerEventListeners();
-
     }
 
     async loadTemplate() {
