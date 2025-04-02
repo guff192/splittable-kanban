@@ -3,10 +3,12 @@
 let isMoving = false;
 
 // Cleanup after dragging
+/*
 window.addEventListener('dragend', (event) => {
     event.target.classList.remove('opacity-50');
     isMoving = false;
 });
+*/
 
 /** 
     * Returns the index of the given column in the columns array.
@@ -77,8 +79,11 @@ export default function handleColumnDragOver(event) {
     event.preventDefault();
 
     const movingCard = document.querySelector('task-card[is-dragging=true]');
+    if (!movingCard) {
+        return;
+    }
     const cardBelow = getCardBelow(this, event.clientY);
-    moveCardAbove(movingCard, this, cardBelow);
+    moveCardAbove(movingCard, this.cardsContainer, cardBelow);
 }
 
 /**

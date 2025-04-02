@@ -15,6 +15,11 @@ export class DispatchToParentButton extends HTMLElement {
     }
 
     async connectedCallback() {
+        if (this.root) {
+            this.drawBtn();
+            return;
+        }
+
         this.root = this.attachShadow({ mode: 'open' });
         this.buttonContainer = document.createElement('div');
         this.root.appendChild(this.buttonContainer);

@@ -1,0 +1,21 @@
+<html>
+
+<head>
+</head>
+
+<body>
+    <template id="header-column-template" name="Column name">
+        <div
+            class="w-72 text-nowrap text-center flex-none box-border flex flex-col justify-around border-r border-r-overlay0 text-3xl">
+            <div class="flex justify-center h-full grow">
+                <h2 class='h-full text-3xl'>
+                    <slot name="name"></slot>
+                </h2>
+                <remove-button></remove-button>
+            </div>
+            <add-button></add-button>
+        </div>
+    </template>
+</body>
+
+</html>

@@ -1,9 +1,9 @@
 import handleColumnDragOver from './drag-n-drop.js';
 
 const tableHeader = document.querySelector('main > header');
-let headerColumns = document.querySelectorAll('main > header > div');
+let headerColumns = document.querySelectorAll('header-column');
 const columnsContainer = document.querySelector('main > section');
-let columns = document.querySelectorAll('main > section > div');
+let columns = document.querySelectorAll('task-column');
 
 function randomString(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -16,24 +16,22 @@ function randomString(length) {
 
 function handleHeaderAdd(event) {
     // Create new header column
-    const newHeaderColumn = document.createElement('div');
+    const newHeaderColumn = document.createElement('header-column');
     const newColumnName = 'Column ' + randomString(3);
-    newHeaderColumn.classList.add('w-72', 'text-nowrap', 'text-center', 'flex-none', 'box-border', 'flex', 'flex-col', 'justify-around', 'border-r', 'border-r-overlay0', 'text-3xl');
+    newHeaderColumn.setAttribute('name', newColumnName);
+
+    const newColumnNameEl = document.createElement('span');
+    newColumnNameEl.setAttribute('slot', 'name');
+    newColumnNameEl.innerText = newColumnName;
+    newHeaderColumn.appendChild(newColumnNameEl);
+
     tableHeader.appendChild(newHeaderColumn);
-    headerColumns = document.querySelectorAll('main > header > div');
-    newHeaderColumn.innerHTML = `
-        <h2 class='h-full grow'>${newColumnName}</h2>
-        <add-button><span slot='name'>Task</span></add-button>
-    `;
+    headerColumns = document.querySelectorAll('header-column');
 
-    // Add event listeners
-    newHeaderColumn.addEventListener('add', handleHeaderColumnAdd);
-    newHeaderColumn.addEventListener('click', handleHeaderColumnClick);
-
-    const newColumn = document.createElement('div');
-    newColumn.classList.add('h-full', 'text-nowrap', 'flex-none', 'w-72', 'box-border');
+    const newColumn = document.createElement('task-column');
+    newColumn.setAttribute('name', newColumnName);
     columnsContainer.appendChild(newColumn);
-    columns = document.querySelectorAll('main > section > div');
+    columns = document.querySelectorAll('task-column');
     newColumn.addEventListener('dragover', handleColumnDragOver);
 
     // Save to local storage
@@ -61,7 +59,7 @@ function handleHeaderColumnClick(event) {
 
     // Check if column name already exists
     let columnExists = false;
-    headerColumns = document.querySelectorAll('main > header > div');
+    headerColumns = document.querySelectorAll('header-column');
     headerColumns.forEach((column) => {
         if (answer === column.querySelector('h2').innerText) {
             alert(`Column with name ${answer} already exists`);
@@ -96,8 +94,9 @@ function handleHeaderColumnClick(event) {
 // Adds new task
 function handleHeaderColumnAdd(event) {
     const taskCard = document.createElement('task-card');
-    const columnIndex = Array.from(headerColumns).indexOf(event.target);
-    columns[columnIndex].insertBefore(taskCard, columns[columnIndex].firstChild);
+    const columnName = event.target.getAttribute('name');
+    const taskColumn = document.querySelector(`task-column[name="${columnName}"]`);
+    taskColumn.insertBefore(taskCard, taskColumn.firstChild);
 
     // Set slots & create card object
     const slotNames = ['count', 'name', 'from', 'responsible'];
@@ -121,8 +120,7 @@ function handleHeaderColumnAdd(event) {
     taskCard.setAttribute('task-id', nextTaskId);
     jsonCard['id'] = nextTaskId;
 
-    // Get column name
-    const columnName = event.target.querySelector('h2').innerText;
+    // Set column name
     jsonCard['column'] = columnName;
 
     // Save to local storage
@@ -154,24 +152,22 @@ function restoreSavedColumns() {
 
     savedColumns.forEach((columnName) => {
         // Create new header column
-        const newHeaderColumn = document.createElement('div');
-        newHeaderColumn.classList.add('w-72', 'text-nowrap', 'text-center', 'flex-none', 'box-border', 'flex', 'flex-col', 'justify-center', 'border-r', 'border-r-overlay0', 'text-3xl');
-        tableHeader.appendChild(newHeaderColumn);
-        headerColumns = document.querySelectorAll('main > header > div');
-        newHeaderColumn.innerHTML = `
-            <h2 class='h-full grow'>${columnName}</h2>
-            <add-button><span slot='name'></span></add-button>
-        `;
+        const newHeaderColumn = document.createElement('header-column');
 
-        // Add event listeners
-        newHeaderColumn.addEventListener('add', handleHeaderColumnAdd);
-        newHeaderColumn.addEventListener('click', handleHeaderColumnClick);
+        newHeaderColumn.setAttribute('name', columnName);
+        const newHeaderColumnNameSpanEl = document.createElement('span');
+        newHeaderColumnNameSpanEl.setAttribute('slot', 'name');
+        newHeaderColumnNameSpanEl.innerText = columnName;
+        newHeaderColumn.appendChild(newHeaderColumnNameSpanEl);
+
+        tableHeader.appendChild(newHeaderColumn);
+        headerColumns = document.querySelectorAll('header-column');
 
         // Create new task column
-        const newColumn = document.createElement('div');
-        newColumn.classList.add('h-full', 'text-nowrap', 'flex-none', 'w-72', 'box-border');
+        const newColumn = document.createElement('task-column');
+        newColumn.setAttribute('name', columnName);
         columnsContainer.appendChild(newColumn);
-        columns = document.querySelectorAll('main > section > div');
+        columns = document.querySelectorAll('task-column');
         newColumn.addEventListener('dragover', handleColumnDragOver);
     });
 
@@ -186,10 +182,9 @@ function restoreSavedTasks() {
 
     savedTasks.forEach((task) => {
         const taskCard = document.createElement('task-card');
-        const headerColumnsArr = Array.from(headerColumns);
-        const headerColumn = headerColumnsArr.find((column) => column.querySelector('h2').innerText === task['column']);
-        const columnIndex = headerColumnsArr.indexOf(headerColumn);
-        columns[columnIndex].insertBefore(taskCard, columns[columnIndex].firstChild);
+        const columnsArr = Array.from(columns);
+        const column = columnsArr.find((col) => col.getAttribute('name') === task['column']);
+        column.cardsContainer.insertBefore(taskCard, column.cardsContainer.firstChild);
 
         // Set slots & create card object
         const slotNames = ['count', 'name', 'from', 'responsible'];
@@ -200,6 +195,7 @@ function restoreSavedTasks() {
             slot.innerText = task[slotName];
         });
         taskCard.setAttribute('task-id', task['id']);
+        taskCard.setAttribute('column', task['column']);
     });
 
     document.dispatchEvent(new Event('reset-theme'));
@@ -263,14 +259,6 @@ function loadProgress (e) {
 }
 
 
-// Add event listener to each column for adding new tasks
-headerColumns.forEach((headerColumn) => {
-    headerColumn.addEventListener('add', handleHeaderColumnAdd);
-
-    // Add event listeners for click to edit
-    headerColumn.querySelector('h2').addEventListener('click', handleHeaderColumnClick);
-});
-
 // Add event listener to table header for adding new columns
 tableHeader.addEventListener('add', handleHeaderAdd);
 
@@ -282,5 +270,6 @@ loadBtn.addEventListener('click', loadProgress);
 document.addEventListener('DOMContentLoaded', () => {
     restoreSavedColumns();
     restoreSavedTasks();
+    // columns.forEach(col => col.drawCards());
 });
 

@@ -2,7 +2,7 @@ import { getNextTaskId } from "../tasks.js";
 import { loadTemplate, loadShadowDomStyles } from "./loaders.js";
 
 
-class TaskCard extends HTMLElement {
+export class TaskCard extends HTMLElement {
     async connectedCallback() {
         if (this.shadowRoot) return;
         this.root = this.attachShadow({ mode: 'open' });
@@ -23,6 +23,7 @@ class TaskCard extends HTMLElement {
 
         this.drawCard();
         this.registerEventListeners();
+
     }
 
     async loadTemplate() {
@@ -57,7 +58,7 @@ class TaskCard extends HTMLElement {
             if (!savedTasks) return;
 
             savedTasks.forEach((task, index) => {
-                if (task['id'] === Number(this.getAttribute('task-id'))) {
+                if (task['id'] === this.getAttribute('task-id')) {
                     savedTasks.splice(index, 1);
                 }
             });
@@ -66,9 +67,24 @@ class TaskCard extends HTMLElement {
         });
     }
 
+    createSpansForSlots() {
+        const slots = this.template.content.querySelectorAll('slot');
+        slots.forEach((slot) => {
+            const slotName = slot.getAttribute('name');
+            const span = document.createElement('span');
+            span.setAttribute('slot', slotName);
+            span.innerText = slot.getAttribute('name')[0].toUpperCase() + slot.getAttribute('name').slice(1);
+            this.appendChild(span);
+        });
+    }
+
     registerClickEventListeners() {
         // Add event listeners for click to edit
-        const slotSpans = this.querySelectorAll("span[slot]");
+        let slotSpans = this.querySelectorAll("span[slot]");
+        if (slotSpans.length === 0) {
+            this.createSpansForSlots();
+            slotSpans = this.querySelectorAll("span[slot]");
+        }
         slotSpans.forEach((span) => {
             span.addEventListener("click", (e) => {
                 if (e.detail < 2) return;
@@ -81,14 +97,14 @@ class TaskCard extends HTMLElement {
 
                 let savedTasks = JSON.parse(localStorage.getItem('tasks'));
                 if (!savedTasks) {
-                    localStorage.setItem('tasks', JSON.stringify(new Array()));
                     savedTasks = [];
                 }
-                savedTasks.forEach((task) => {
-                    if (task['id'] === Number(this.getAttribute('task-id'))) {
-                        task[slotName] = answer;
+                savedTasks.forEach((task, index) => {
+                    if (task['id'] === this.getAttribute('task-id')) {
+                        savedTasks.splice(index, 1);
                     }
                 });
+                savedTasks.push(this.toObject());
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
             });
         });
@@ -128,10 +144,16 @@ class TaskCard extends HTMLElement {
             card.classList.remove('opacity-50');
 
             this.removeAttribute("is-dragging");
-            const newColumnIndex = Array.from(document.querySelectorAll('main > section > div')).indexOf(this.parentNode);
-            const newColumnName = document.querySelectorAll('main > header > div')[newColumnIndex].querySelector('h2').textContent;
+            const newColumn = this.parentNode.parentNode;
+            const newColumnName = newColumn.getAttribute('name');
+            this.setAttribute('column', newColumnName);
             let savedTasks = JSON.parse(localStorage.getItem('tasks'));
-            savedTasks.filter((task) => task.id === Number(this.getAttribute('task-id')))[0]['column'] = newColumnName;
+            savedTasks.forEach((task, index) => {
+                if (task['id'] === this.getAttribute('task-id')) {
+                    savedTasks.splice(index, 1);
+                }
+            });
+            savedTasks.push(this.toObject());
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
         });
     }
@@ -149,8 +171,7 @@ class TaskCard extends HTMLElement {
 
             // Create new card
             const column = this.parentNode;
-            const columnIndex = Array.from(document.querySelectorAll('main > section > div')).indexOf(column);
-            const columnName = document.querySelectorAll('main > header > div')[columnIndex].querySelector('h2').textContent;
+            const columnName = column.getAttribute('name');
             const newCard = this.cloneNode(true);
             const newCardId = getNextTaskId();
             newCard.querySelector("span[slot=count]").innerText = currentCount - answer;
@@ -165,18 +186,11 @@ class TaskCard extends HTMLElement {
             }
 
             // Save new task
-            savedTasks.push({
-                'id': newCardId,
-                'name': newCard.querySelector("span[slot=name]").innerText,
-                'from': newCard.querySelector("span[slot=from]").innerText,
-                'responsible': newCard.querySelector("span[slot=responsible]").innerText,
-                'column': columnName,
-                'count': Number(newCard.querySelector("span[slot=count]").innerText)
-            });
+            savedTasks.push(newCard.toObject());
 
             // Update count on old card
             this.querySelector("span[slot=count]").innerText = answer;
-            savedTasks.filter((task) => task['id'] === Number(this.getAttribute('task-id')))[0]['count'] = answer;
+            savedTasks.filter((task) => task['id'] === this.getAttribute('task-id'))[0]['count'] = answer;
 
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
         });
@@ -188,6 +202,35 @@ class TaskCard extends HTMLElement {
             this.cardElement.innerHTML = '';
             this.cardElement.appendChild(clone);
         }
+    }
+
+    saveToLocalStorage() {
+        const cardObj = this.toObject();
+
+        let savedTasks = JSON.parse(localStorage.getItem('tasks'));
+        if (!savedTasks) {
+            savedTasks = [];
+        }
+        savedTasks.push(cardObj);
+        localStorage.setItem('tasks', JSON.stringify(savedTasks));
+    }
+
+    toObject() {
+        // Set slots & create card object
+        const slotNames = ['count', 'name', 'from', 'responsible'];
+        const jsonCard = new Object();
+        slotNames.forEach((slotName) => {
+            const slot = this.querySelector(`span[slot=${slotName}]`);
+            if (!slot) {
+                jsonCard[slotName] = slotName[0].toUpperCase() + slotName.slice(1);
+                return;
+            }
+            jsonCard[slotName] = slot.innerText;
+        });
+        jsonCard['id'] = this.getAttribute('task-id');
+        jsonCard['column'] = this.getAttribute('column')
+
+        return jsonCard;
     }
 
 }
