@@ -1,5 +1,3 @@
-import handleColumnDragOver from './drag-n-drop.js';
-
 const tableHeader = document.querySelector('main > header');
 let headerColumns = document.querySelectorAll('header-column');
 const columnsContainer = document.querySelector('main > section');
@@ -32,7 +30,6 @@ function handleHeaderAdd(event) {
     newColumn.setAttribute('name', newColumnName);
     columnsContainer.appendChild(newColumn);
     columns = document.querySelectorAll('task-column');
-    newColumn.addEventListener('dragover', handleColumnDragOver);
 
     // Save to local storage
     let savedColumns = JSON.parse(localStorage.getItem('columns'));
@@ -168,7 +165,6 @@ function restoreSavedColumns() {
         newColumn.setAttribute('name', columnName);
         columnsContainer.appendChild(newColumn);
         columns = document.querySelectorAll('task-column');
-        newColumn.addEventListener('dragover', handleColumnDragOver);
     });
 
     document.dispatchEvent(new Event('reset-theme'));

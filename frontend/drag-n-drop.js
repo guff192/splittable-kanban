@@ -36,7 +36,7 @@ function removeWithAnimation(card) {
     * @param {HTMLElement} column - The column where the moving card is placed
     * @param {HTMLElement|null} [belowCard=null] - The card which should be below the one that is moving.
 */
-function moveCardAbove(movingCard, column, belowCard=null) {
+export function moveCardAbove(movingCard, column, belowCard=null) {
     isMoving = true;
     if (!belowCard) {
         column.appendChild(movingCard);
@@ -51,7 +51,7 @@ function moveCardAbove(movingCard, column, belowCard=null) {
     * @param {number} yPos - The y position of the card.
     * @returns {HTMLElement|null} - The card element or null if not found.
 */
-function getCardBelow(column, yPos) {
+export function getCardBelow(column, yPos) {
     const cardsInCol = column.querySelectorAll('task-card');
 
     let closestCard = null;
@@ -70,37 +70,6 @@ function getCardBelow(column, yPos) {
     return closestCard;
 }
 
-/**
-    *
-    * Handles dragover event on a column when a card is being dragged over it.
-    * @param {DragEvent} event - The dragover DragEvent object.
-*/
-export default function handleColumnDragOver(event) {
-    event.preventDefault();
-
-    const movingCard = document.querySelector('task-card[is-dragging=true]');
-    if (!movingCard) {
-        return;
-    }
-    const cardBelow = getCardBelow(this, event.clientY);
-    moveCardAbove(movingCard, this.cardsContainer, cardBelow);
-}
-
-/**
-    *
-    * Handles dragover event on a card in column when a card is being dragged over it.
-    * @param {DragEvent} event - The dragover DragEvent object.
-*/
-function handleCardDragOver(event) {
-    event.preventDefault();
-
-    const movingCard = document.querySelector('div[is-dragging=true]');
-    const column = this.parentNode;
-    const cardBelow = getCardBelow(column, event.clientY);
-    moveCardAbove(movingCard, column, cardBelow);
-}
-
-
 const main = document.querySelector('main');
 const dropColumns = main.querySelector('section').querySelectorAll('div.h-full');
 
@@ -109,5 +78,4 @@ if (typeof(draggables) === 'undefined') {
     var draggables = new Array();
 }
 
-dropColumns.forEach((column) => column.addEventListener('dragover', handleColumnDragOver));
 

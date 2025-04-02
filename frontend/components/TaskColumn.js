@@ -1,3 +1,4 @@
+import { getCardBelow, moveCardAbove } from "../drag-n-drop.js";
 import { loadTemplate, loadShadowDomStyles } from "./loaders.js";
 
 class TaskColumn extends HTMLElement {
@@ -21,6 +22,7 @@ class TaskColumn extends HTMLElement {
         this.template = template;
         this.root.adoptedStyleSheets = [stylesheet];
         this.drawColumn();
+        this.registerEventListeners();
     }
 
     async loadTemplate() {
@@ -31,6 +33,56 @@ class TaskColumn extends HTMLElement {
     async loadStyles() {
         const sheet = await loadShadowDomStyles();
         return sheet;
+    }
+
+    registerEventListeners() {
+        this.registerDragEventListeners();
+        this.registerTouchEventListeners();
+    }
+
+    registerDragEventListeners() {
+        this.addEventListener('dragover', (event) => {
+            event.preventDefault();
+
+            const movingCard = document.querySelector('task-card[is-dragging=true]');
+            if (!movingCard) {
+                return;
+            }
+            console.log(`X: ${event.clientX}, Y: ${event.clientY}`);
+            const cardBelow = getCardBelow(this, event.clientY);
+            moveCardAbove(movingCard, this.cardsContainer, cardBelow);
+        });
+    }
+
+    registerTouchEventListeners() {
+        this.addEventListener('touchmove', (e) => {
+            const movingCard = document.querySelector('task-card[is-dragging=true]');
+            if (!movingCard) {
+                return;
+            }
+            e.preventDefault();
+
+            const xPos = e.touches[0].clientX, yPos = e.touches[0].clientY;;
+            const { right, left } = this.getBoundingClientRect();
+
+            let column;
+            if (xPos > left && xPos < right) {
+                column = this;
+            } else {
+                const taskColumns = document.querySelectorAll('task-column');
+                for (let i = 0; i < taskColumns.length; i++) {
+                    const { right: colRight, left: colLeft } = taskColumns[i].getBoundingClientRect();
+                    if (xPos > colLeft && xPos < colRight) {
+                        column = taskColumns[i];
+                        break;
+                    }
+                }
+            }
+
+            const cardBelow = getCardBelow(column, yPos);
+            moveCardAbove(movingCard, column.cardsContainer, cardBelow);
+
+        });
     }
 
     drawColumn() {

@@ -23,7 +23,6 @@ export class TaskCard extends HTMLElement {
 
         this.drawCard();
         this.registerEventListeners();
-
     }
 
     async loadTemplate() {
@@ -40,6 +39,7 @@ export class TaskCard extends HTMLElement {
         this.registerDragEventListeners();
         this.registerSplitEventListeners();
         this.registerClickEventListeners();
+        this.registerTouchEventListeners();
         this.registerCustomEventListeners();
     }
 
@@ -104,7 +104,7 @@ export class TaskCard extends HTMLElement {
                         savedTasks.splice(index, 1);
                     }
                 });
-                savedTasks.push(this.toObject());
+                this.saveToLocalStorage();
                 localStorage.setItem('tasks', JSON.stringify(savedTasks));
             });
         });
@@ -125,36 +125,23 @@ export class TaskCard extends HTMLElement {
             const transparentImage = new Image();
             e.dataTransfer.setDragImage(transparentImage, 0, 0);
 
-            // Change border and bg colors of draggable card (this should be Card Component logic)
-            card.classList.remove("border-teal");
-            card.classList.add("border-yellow");
-            card.classList.remove("bg-surface2");
-            card.classList.add("bg-surface0");
-            card.classList.add('opacity-50');
-
-            this.setAttribute("is-dragging", "true");
+            this.startDragging();
         });
 
         draggable.addEventListener("dragend", (e) => {
-            // Return initial border and bg colors of draggable card (this should be Card Component logic)
-            card.classList.remove("border-yellow");
-            card.classList.add("border-teal");
-            card.classList.remove("bg-surface0");
-            card.classList.add("bg-surface2");
-            card.classList.remove('opacity-50');
+            this.stopDragging();
+        });
+    }
 
-            this.removeAttribute("is-dragging");
-            const newColumn = this.parentNode.parentNode;
-            const newColumnName = newColumn.getAttribute('name');
-            this.setAttribute('column', newColumnName);
-            let savedTasks = JSON.parse(localStorage.getItem('tasks'));
-            savedTasks.forEach((task, index) => {
-                if (task['id'] === this.getAttribute('task-id')) {
-                    savedTasks.splice(index, 1);
-                }
-            });
-            savedTasks.push(this.toObject());
-            localStorage.setItem('tasks', JSON.stringify(savedTasks));
+    registerTouchEventListeners() {
+        const draggable = this.root.querySelector("div[draggable=true]");
+
+        draggable.addEventListener('touchstart', (e) => {
+            this.startDragging();
+        });
+
+        draggable.addEventListener('touchend', (e) => {
+            this.stopDragging();
         });
     }
 
@@ -171,29 +158,63 @@ export class TaskCard extends HTMLElement {
 
             // Create new card
             const column = this.parentNode;
-            const columnName = column.getAttribute('name');
             const newCard = this.cloneNode(true);
             const newCardId = getNextTaskId();
             newCard.querySelector("span[slot=count]").innerText = currentCount - answer;
             newCard.setAttribute('task-id', newCardId);
             column.insertBefore(newCard, this);
 
-            // Save changes to localStorage
-            let savedTasks = JSON.parse(localStorage.getItem('tasks'));
-            if (!savedTasks) {
-                localStorage.setItem('tasks', JSON.stringify(new Array()));
-                savedTasks = [];
-            }
-
             // Save new task
-            savedTasks.push(newCard.toObject());
+            this.saveToLocalStorage();
 
             // Update count on old card
+            const savedTasks = JSON.parse(localStorage.getItem('tasks'));
             this.querySelector("span[slot=count]").innerText = answer;
             savedTasks.filter((task) => task['id'] === this.getAttribute('task-id'))[0]['count'] = answer;
 
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
         });
+    }
+
+    startDragging() {
+        const cardContainer = this.cardElement.querySelector('div.border-teal');
+
+        // Change border and bg colors of draggable card (this should be Card Component logic)
+        cardContainer.classList.remove("border-teal");
+        cardContainer.classList.add("border-yellow");
+        cardContainer.classList.remove("bg-surface2");
+        cardContainer.classList.add("bg-surface0");
+        cardContainer.classList.add('opacity-50');
+
+        this.setAttribute("is-dragging", "true");
+    }
+
+    stopDragging() {
+        const cardContainer = this.cardElement.querySelector('div.border-yellow');
+
+        // Return initial border and bg colors of draggable card (this should be Card Component logic)
+        cardContainer.classList.remove("border-yellow");
+        cardContainer.classList.add("border-teal");
+        cardContainer.classList.remove("bg-surface0");
+        cardContainer.classList.add("bg-surface2");
+        cardContainer.classList.remove('opacity-50');
+
+        this.removeAttribute("is-dragging");
+        const newColumn = this.parentNode.parentNode;
+        const newColumnName = newColumn.getAttribute('name');
+        this.setAttribute('column', newColumnName);
+        let savedTasks = JSON.parse(localStorage.getItem('tasks'));
+        savedTasks.forEach((task, index) => {
+            if (task['id'] === this.getAttribute('task-id')) {
+                savedTasks.splice(index, 1);
+            }
+        });
+        savedTasks.push(this.toObject());
+        localStorage.setItem('tasks', JSON.stringify(savedTasks));
+
+        // Reset event listener on child button
+        const removeButton = this.root.querySelector('remove-button');
+        removeButton.registerEventListeners();
     }
 
     drawCard() {
