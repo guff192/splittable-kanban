@@ -154,6 +154,10 @@ export class TaskCard extends HTMLElement {
             });
             savedTasks.push(this.toObject());
             localStorage.setItem('tasks', JSON.stringify(savedTasks));
+
+            // Reset event listener on child button
+            const removeButton = this.root.querySelector('remove-button');
+            removeButton.registerEventListeners();
         });
     }
 
