@@ -300,6 +300,9 @@
   .h-14 {
     height: calc(var(--spacing) * 14);
   }
+  .h-15 {
+    height: calc(var(--spacing) * 15);
+  }
   .h-24 {
     height: calc(var(--spacing) * 24);
   }
@@ -335,6 +338,9 @@
   }
   .w-11\/12 {
     width: calc(11/12 * 100%);
+  }
+  .w-15 {
+    width: calc(var(--spacing) * 15);
   }
   .w-16 {
     width: calc(var(--spacing) * 16);
@@ -559,6 +565,9 @@
   }
   .bg-clip-text {
     background-clip: text;
+  }
+  .bg-no-repeat {
+    background-repeat: no-repeat;
   }
   .p-0 {
     padding: calc(var(--spacing) * 0);

@@ -7,7 +7,8 @@
     <template id="task-card-template">
         <div
             class="w-11/12 h-50 flex-none mx-auto my-5 px-2 py-0.5 border-teal border-2 rounded-lg flex flex-col justify-around bg-surface2 group hover:bg-sapphire/50 duration-200">
-            <div class="flex justify-end h-min">
+            <div class="flex justify-between h-min">
+                <div class="bg-[url(/img/drag.png)] bg-contain bg-no-repeat w-10 h-10 cursor-move invert" draggable="true"></div>
                 <remove-button></remove-button>
             </div>
             <header class="flex justify-between text-text group-hover:text-black">
@@ -28,7 +29,6 @@
             </section>
             <button
                 class="w-16 h-9 mx-auto rounded-xl bg-peach hover:bg-peach/75 active:bg-maroon duration-300 text-gray-700">Split</button>
-            <div class="bg-[url(/img/drag.png)] bg-contain w-5 h-5 mx-auto cursor-move invert" draggable="true"></div>
         </div>
     </template>
 </body>
